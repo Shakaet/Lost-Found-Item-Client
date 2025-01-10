@@ -11,6 +11,7 @@ const AllItems = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('title'); // State to manage sorting option
 
   const { count } = useLoaderData();
 
@@ -18,19 +19,14 @@ const AllItems = () => {
   const [itemPerPages, setItemPerPages] = useState(20);
   const [currentPage, setCurrentPage] = useState(0);
 
-  let handleItemPerPages=(e)=>{
- 
-    let val=parseInt(e.target.value)
-   
-    setItemPerPages(val)
-    setCurrentPage(0)
-
-}
+  const handleItemPerPages = (e) => {
+    let val = parseInt(e.target.value);
+    setItemPerPages(val);
+    setCurrentPage(0);
+  };
 
   const numOfPages = Math.ceil(count / itemPerPages);
   const pages = [...Array(numOfPages).keys()];
-
- 
 
   useEffect(() => {
     axios
@@ -42,7 +38,7 @@ const AllItems = () => {
       .catch((error) => {
         console.error('There was an error fetching the items!', error);
       });
-  }, [currentPage,itemPerPages]);
+  }, [currentPage, itemPerPages]);
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -51,6 +47,28 @@ const AllItems = () => {
       item.title.toLowerCase().includes(query)
     );
     setFilteredItems(filtered);
+  };
+
+  // Sort handler
+  const handleSort = (option) => {
+    setSortOption(option);
+    let sortedItems = [...filteredItems];
+
+    switch (option) {
+      case 'title':
+        sortedItems.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'category':
+        sortedItems.sort((a, b) => a.category.localeCompare(b.category));
+        break;
+      case 'location':
+        sortedItems.sort((a, b) => a.location.localeCompare(b.location));
+        break;
+      default:
+        break;
+    }
+
+    setFilteredItems(sortedItems);
   };
 
   if (items.length === 0) {
@@ -70,6 +88,19 @@ const AllItems = () => {
           placeholder="Search items by title..."
           className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
+      </div>
+
+      {/* Sorting Dropdown */}
+      <div className="mb-6 md:w-1/3 mx-auto">
+        <select
+          value={sortOption}
+          onChange={(e) => handleSort(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        >
+          <option value="title">Sort by Title</option>
+          <option value="category">Sort by Category</option>
+          <option value="location">Sort by Location</option>
+        </select>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -103,7 +134,6 @@ const AllItems = () => {
 
       {/* Pagination */}
       <div className="mt-6 flex flex-col items-center">
-        
         <div className="flex gap-2 items-center">
           <button
             onClick={() => {

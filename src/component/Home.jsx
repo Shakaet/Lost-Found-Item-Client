@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion'; // Import Framer Motion
 import axios from 'axios';
 import banner1 from "../assets/banner1.webp"
-import banner2 from "../assets/banner4.jpg"
-import banner3 from "../assets/banner3.jpg"
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 const Home = () => {
   useEffect(() => {
@@ -14,7 +13,9 @@ const Home = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   
-  const banners = [banner1, banner2, banner3];
+  const banners = [banner1];
+
+ 
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -25,6 +26,7 @@ const Home = () => {
   }, [banners.length]);
 
   const [latestItems, setLatestItems] = useState([]);
+  
 
   useEffect(() => {
     
@@ -56,12 +58,26 @@ const Home = () => {
         >
           <img
             src={banner}
-            className="w-full h-72 sm:h-80 md:h-96 object-cover rounded-lg"
+            className="w-full h-72 sm:h-80 md:h-96 rounded-lg object-cover"
             alt={`Banner ${index + 1}`}
           />
         </div>
       ))}
     </motion.div>
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
 
 
       {/* Latest Find & Lost Items Section */}
@@ -72,8 +88,8 @@ const Home = () => {
         transition={{ duration: 1 }}
       >
         <h2 className="text-3xl font-bold text-center mb-20">Latest Lost Items</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {latestItems.map((item) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {latestItems.slice(0,4).map((item) => (
             <motion.div
               key={item._id}
               className="bg-white text-black rounded-lg shadow-lg p-4"
@@ -99,7 +115,7 @@ const Home = () => {
             </motion.div>
           ))}
         </div>
-        <div className="text-center mt-6">
+        <div className="text-center mt-10">
           <Link
             to="/alltimes"
             className="inline-block bg-green-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition duration-200"
@@ -201,6 +217,62 @@ const Home = () => {
         </div>
       </div>
     </motion.div>
+
+     {/* Extra Section 1: Why Choose Us */}
+     <motion.div
+        className="bg-gradient-to-r from-green-600 via-blue-600 to-indigo-600 py-12"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="max-w-7xl mx-auto text-center px-6">
+          <h2 className="text-3xl font-bold mb-6">Why Choose Us</h2>
+          <p className="text-lg mb-8">We offer the best platform for reconnecting people with their lost belongings.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="bg-white text-black rounded-lg shadow-lg p-6">
+              <h3 className="text-xl font-bold mb-2">Fast and Reliable</h3>
+              <p>Quickly find or report lost items with our efficient system.</p>
+            </div>
+            <div className="bg-white text-black rounded-lg shadow-lg p-6">
+              <h3 className="text-xl font-bold mb-2">User-Friendly</h3>
+              <p>Simple and intuitive design for all users.</p>
+            </div>
+            <div className="bg-white text-black rounded-lg shadow-lg p-6">
+              <h3 className="text-xl font-bold mb-2">Secure</h3>
+              <p>Your data is safe with us, ensuring privacy and trust.</p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+  {/* Extra Section 3: Safety Tips for Lost & Found Items */}
+<motion.div
+  className="bg-gradient-to-r from-teal-500 via-green-500 to-blue-500 py-12 mb-5"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 1.5 }}
+>
+  <div className="max-w-7xl mx-auto text-center px-6">
+    <h2 className="text-3xl font-bold text-white mb-6">Safety Tips for Lost & Found Items</h2>
+    <p className="text-lg mb-4">We prioritize your safety while helping you retrieve lost items. Follow these tips:</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="bg-white text-black rounded-lg shadow-lg p-6">
+        <h3 className="text-2xl font-bold mb-2">Tip 1</h3>
+        <p>Meet in a safe, public place when returning or receiving an item.</p>
+      </div>
+      <div className="bg-white text-black rounded-lg shadow-lg p-6">
+        <h3 className="text-2xl font-bold mb-2">Tip 2</h3>
+        <p>Do not share personal information like home addresses or financial details.</p>
+      </div>
+      <div className="bg-white text-black rounded-lg shadow-lg p-6">
+        <h3 className="text-2xl font-bold mb-2">Tip 3</h3>
+        <p>Verify the item's details before meeting, and ask for proof of ownership.</p>
+      </div>
+    </div>
+    <p className="text-lg mt-4">We encourage you to follow these simple precautions for a safer experience on our platform.</p>
+  </div>
+</motion.div>
+
     </div>
   );
 };

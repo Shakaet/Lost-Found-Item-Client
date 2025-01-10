@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
 
 
- <div className="navbar bg-gradient-to-r from-blue-500 to-teal-500 shadow-xl px-6 py-4">
+ <div className="navbar bg-gradient-to-r from-blue-500 to-teal-500 shadow-xl px-6 py-4 sticky top-0 z-50">
       <div className="flex justify-between items-center w-full">
         <div className="flex-1">
           <Link to="/" className="flex gap-2 items-center">

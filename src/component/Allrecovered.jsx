@@ -10,7 +10,7 @@ const AllRecovered = () => {
                 }, []);
   const { user } = useContext(AuthContext);
   const [items, setItems] = useState([]);
-  const [isTableLayout, setIsTableLayout] = useState(false); // Control layout switch
+  const [isTableLayout, setIsTableLayout] = useState(true); // Control layout switch
   let axiosInstance=UseAxios()
 
   // Fetch all recovered items

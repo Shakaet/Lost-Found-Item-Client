@@ -51,7 +51,7 @@ const Footer = () => {
     <div>
       <h3 className="text-xl font-bold mb-4">Contact Us</h3>
       <p className="text-sm mb-2">
-        <strong>Email:</strong> support@lostandfound.com
+        <strong>Email:</strong> abdshakaet@gmail.com
       </p>
       <p className="text-sm mb-2">
         <strong>Phone:</strong> +1 123-456-7890
