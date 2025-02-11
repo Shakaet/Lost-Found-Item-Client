@@ -8,6 +8,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import UseAxios from './UseAxios';
 import LoadingSpinner from './LoadingSpinner';
 
+
+// details section
+
 const Details = () => {
   useEffect(() => {
                 document.title = "Items Details"; 
