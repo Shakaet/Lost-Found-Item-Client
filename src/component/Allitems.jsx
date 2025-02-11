@@ -3,6 +3,9 @@ import axios from 'axios';
 import { Link, useLoaderData } from 'react-router-dom'; // for navigation to the details page
 import LoadingSpinner from './LoadingSpinner';
 
+
+//allitems pages
+
 const AllItems = () => {
   useEffect(() => {
     document.title = 'Lost & Found items';
