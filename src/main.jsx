@@ -24,6 +24,7 @@ import PrivateRoute from './component/PrivateRoute.jsx';
 import ErrorPages from './component/ErrorPages.jsx';
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -73,25 +74,27 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <AuthProvider>
+  
+    <AuthProvider>
 
     
       
-      <RouterProvider router={router} />
+<RouterProvider router={router} />
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      
-    
-  </AuthProvider>,
+<ToastContainer
+  position="top-right"
+  autoClose={3000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="colored"
+/>
+
+
+</AuthProvider>,
+
 )

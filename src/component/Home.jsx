@@ -2,20 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion'; // Import Framer Motion
 import axios from 'axios';
-import banner1 from "../assets/banner1.webp"
+import banner1 from "../assets/banner1.webp";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const Home = () => {
-  useEffect(() => {
-    document.title = "Home - Lost & Found";
-  }, []);
-
   const [currentSlide, setCurrentSlide] = useState(0);
-  
   const banners = [banner1];
 
- 
+  const [latestItems, setLatestItems] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(false); // Dark mode state
+
+  useEffect(() => {
+    document.title = "Home - Lost & Found";
+    // Check if dark mode preference exists in localStorage
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+    }
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -25,11 +30,25 @@ const Home = () => {
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [banners.length]);
 
-  const [latestItems, setLatestItems] = useState([]);
-  
+  // Toggle dark/light mode
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => {
+      const newTheme = !prev;
+      // Save the new theme in localStorage
+      localStorage.setItem("theme", newTheme ? "dark" : "light");
+      return newTheme;
+    });
+  };
 
   useEffect(() => {
-    
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
+
+  useEffect(() => {
     axios
       .get('https://npm-server.vercel.app/items?limit=6&sort=desc')
       .then((response) => {
@@ -41,44 +60,37 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white min-h-screen">
-     {/* Banner/Slider */}
-     <motion.div
-      className="carousel mx-auto my-8 w-full"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      {banners.map((banner, index) => (
-        <div
-          key={index}
-          className={`carousel-item relative w-full ${
-            currentSlide === index ? 'block' : 'hidden'
-          }`}
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white'}`}>
+      {/* Theme Toggle Button */}
+      <div className="">
+        <button
+          onClick={toggleTheme}
+          className="mt-5 ms-2 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700 transition duration-300"
         >
-          <img
-            src={banner}
-            className="w-full h-72 sm:h-80 md:h-96 rounded-lg object-cover"
-            alt={`Banner ${index + 1}`}
-          />
-        </div>
-      ))}
-    </motion.div>
+          {isDarkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+      </div>
 
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
+      {/* Banner/Slider */}
+      <motion.div
+        className="carousel mx-auto my-8 w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {banners.map((banner, index) => (
+          <div
+            key={index}
+            className={`carousel-item relative w-full ${currentSlide === index ? 'block' : 'hidden'}`}
+          >
+            <img
+              src={banner}
+              className="w-full h-72 sm:h-80 md:h-96 rounded-lg object-cover"
+              alt={`Banner ${index + 1}`}
+            />
+          </div>
+        ))}
+      </motion.div>
 
       {/* Latest Find & Lost Items Section */}
       <motion.div
@@ -89,7 +101,7 @@ const Home = () => {
       >
         <h2 className="text-3xl font-bold text-center mb-20">Latest Lost Items</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {latestItems.slice(0,4).map((item) => (
+          {latestItems.slice(0, 4).map((item) => (
             <motion.div
               key={item._id}
               className="bg-white text-black rounded-lg shadow-lg p-4"
@@ -125,9 +137,12 @@ const Home = () => {
         </div>
       </motion.div>
 
-      {/* Extra Section 1: How It Works */}
+      {/* Additional Sections (How it Works, Testimonials, etc.) */}
+
+      {/* Make sure you apply similar dynamic styles for each section, such as changing background colors or text colors based on the dark mode. */}
+      {/* Example: */}
       <motion.div
-        className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 py-12"
+        className={`bg-gradient-to-r ${isDarkMode ? 'from-gray-700 via-gray-800 to-black' : 'from-purple-600 via-pink-600 to-red-600'} py-12`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
@@ -152,9 +167,10 @@ const Home = () => {
         </div>
       </motion.div>
 
-      {/* Extra Section 2: User Testimonials */}
+
+          {/* Extra Section 2: User Testimonials */}
       <motion.div
-        className="bg-gradient-to-r from-teal-500 via-green-500 to-blue-500 py-12"
+        className={`bg-gradient-to-r ${isDarkMode ? 'from-gray-700 via-gray-800 to-black' : 'from-purple-600 via-pink-600 to-red-600'}  py-12`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
@@ -179,7 +195,7 @@ const Home = () => {
       </motion.div>
 
       <motion.div
-      className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-16 px-6"
+      className={`bg-gradient-to-r ${isDarkMode ? 'from-gray-700 via-gray-800 to-black' : 'from-purple-600 via-pink-600 to-red-600'}  text-white py-16 px-6`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -220,7 +236,7 @@ const Home = () => {
 
      {/* Extra Section 1: Why Choose Us */}
      <motion.div
-        className="bg-gradient-to-r from-green-600 via-blue-600 to-indigo-600 py-12"
+        className={`bg-gradient-to-r ${isDarkMode ? 'from-gray-700 via-gray-800 to-black' : 'from-purple-600 via-pink-600 to-red-600'}  py-12`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -247,7 +263,7 @@ const Home = () => {
 
   {/* Extra Section 3: Safety Tips for Lost & Found Items */}
 <motion.div
-  className="bg-gradient-to-r from-teal-500 via-green-500 to-blue-500 py-12 mb-5"
+  className={`bg-gradient-to-r ${isDarkMode ? 'from-gray-700 via-gray-800 to-black' : 'from-purple-600 via-pink-600 to-red-600'}  py-12 mb-5`}
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
   transition={{ duration: 1.5 }}
@@ -272,6 +288,7 @@ const Home = () => {
     <p className="text-lg mt-4">We encourage you to follow these simple precautions for a safer experience on our platform.</p>
   </div>
 </motion.div>
+
 
     </div>
   );
